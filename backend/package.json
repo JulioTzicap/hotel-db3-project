@@ -1,0 +1,26 @@
+{
+  "name": "hotel-db3-project",
+  "version": "1.0.0",
+  "description": "Proyecto final Bases de Datos III",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "faker": "^6.6.6",
+    "mongoose": "^8.18.0",
+    "morgan": "^1.10.1",
+    "pg": "^8.16.3",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
