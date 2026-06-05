@@ -1,24 +1,24 @@
 Entrar a la carpeta de backend
 
-cd backend
+    cd backend
 
 Ejecutar los siguientes coandos:
 
-npm init -y
+    npm init -y
 
-npm install express pg mongoose dotenv cors morgan nodemon faker bcrypt uuid
+    npm install express pg mongoose dotenv cors morgan nodemon faker bcrypt uuid
 
 
 Ejecutar lo archivos sql de la siguiente manera:
 
-schema.sql
+    schema.sql
 
-indexes.sql
-
-views.sql
-
-functions.sql
-
-seed.sql
-
-pruebas.sql
+    indexes.sql
+    
+    views.sql
+    
+    functions.sql
+    
+    seed.sql
+    
+    pruebas.sql
