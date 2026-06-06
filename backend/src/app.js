@@ -1,35 +1,29 @@
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
 require("dotenv").config();
 
-const pool = require("./config/postgres");
-const connectMongo = require("./config/mongo");
+const express = require("express");
+
+const conectarMongo = require(
+    "./config/mongo"
+);
+
+const routes = require(
+    "./routes"
+);
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
-app.use(morgan("dev"));
 
-app.get("/", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
+conectarMongo();
 
-    res.json({
-      ok: true,
-      postgres: result.rows[0],
-      message: "API funcionando correctamente"
-    });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+app.use("/api", routes);
 
-connectMongo();
-
-const PORT = process.env.PORT || 3000;
+const PORT =
+    process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en puerto ${PORT}`);
+
+    console.log(
+        `Servidor corriendo en puerto ${PORT}`
+    );
 });

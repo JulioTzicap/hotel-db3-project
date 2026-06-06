@@ -1,13 +1,17 @@
-const roomService = require(
-    "../services/roomService"
+const guestService = require(
+    "../services/guestService"
 );
 
-async function obtenerHabitaciones(req, res) {
+const checkoutService = require(
+    "../services/checkoutService"
+);
+
+async function obtenerHuespedes(req, res) {
 
     try {
 
         const datos =
-            await roomService.obtenerHabitaciones();
+            await guestService.obtenerHuespedes();
 
         res.json(datos);
 
@@ -19,12 +23,12 @@ async function obtenerHabitaciones(req, res) {
     }
 }
 
-async function obtenerHabitacionPorId(req, res) {
+async function obtenerHuespedPorId(req, res) {
 
     try {
 
         const datos =
-            await roomService.obtenerHabitacionPorId(
+            await guestService.obtenerHuespedPorId(
                 req.params.id
             );
 
@@ -38,12 +42,12 @@ async function obtenerHabitacionPorId(req, res) {
     }
 }
 
-async function crearHabitacion(req, res) {
+async function crearHuesped(req, res) {
 
     try {
 
         const datos =
-            await roomService.crearHabitacion(
+            await guestService.crearHuesped(
                 req.body
             );
 
@@ -57,12 +61,12 @@ async function crearHabitacion(req, res) {
     }
 }
 
-async function actualizarHabitacion(req, res) {
+async function actualizarHuesped(req, res) {
 
     try {
 
         const datos =
-            await roomService.actualizarHabitacion(
+            await guestService.actualizarHuesped(
                 req.params.id,
                 req.body
             );
@@ -77,12 +81,12 @@ async function actualizarHabitacion(req, res) {
     }
 }
 
-async function eliminarHabitacion(req, res) {
+async function eliminarHuesped(req, res) {
 
     try {
 
         const datos =
-            await roomService.eliminarHabitacion(
+            await guestService.eliminarHuesped(
                 req.params.id
             );
 
@@ -96,15 +100,36 @@ async function eliminarHabitacion(req, res) {
     }
 }
 
+async function checkout(req, res) {
+
+    try {
+
+        const resultado =
+            await checkoutService.realizarCheckout(
+                req.body
+            );
+
+        res.json(resultado);
+
+    } catch (error) {
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
 
-    obtenerHabitaciones,
+    obtenerHuespedes,
 
-    obtenerHabitacionPorId,
+    obtenerHuespedPorId,
 
-    crearHabitacion,
+    crearHuesped,
 
-    actualizarHabitacion,
+    actualizarHuesped,
 
-    eliminarHabitacion
+    eliminarHuesped,
+
+    checkout
 };
