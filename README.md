@@ -22,3 +22,5 @@ Ejecutar lo archivos sql de la siguiente manera:
     seed.sql
     
     pruebas.sql
+
+    procedures.sql
