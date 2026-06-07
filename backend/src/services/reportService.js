@@ -43,6 +43,39 @@ async function ocupacionMensual() {
     return resultado.rows;
 }
 
+async function obtenerDisponibilidad(
+    inicio,
+    fin,
+    tipo
+) {
+
+    const resultado = await pool.query(
+        `
+        SELECT *
+        FROM obtener_habitaciones_disponibles(
+            $1,
+            $2,
+            $3
+        )
+        `,
+        [inicio, fin, tipo]
+    );
+
+    return resultado.rows;
+}
+
+async function obtenerSaldoReserva(id) {
+
+    const resultado = await pool.query(
+        `
+        SELECT obtener_saldo_reserva($1)
+        `,
+        [id]
+    );
+
+    return resultado.rows[0];
+}
+
 module.exports = {
 
     habitacionesDisponibles,
@@ -57,5 +90,9 @@ module.exports = {
 
     obtenerAnalisisIncidencias,
 
-    obtenerPerfilHuespedesFrecuentes
+    obtenerPerfilHuespedesFrecuentes,
+
+    obtenerDisponibilidad,
+
+    obtenerSaldoReserva
 };

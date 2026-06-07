@@ -74,6 +74,54 @@ async function obtenerSatisfaccion(req, res) {
     }
 }
 
+async function obtenerDisponibilidad(req, res) {
+
+    try {
+
+        const {
+            inicio,
+            fin,
+            tipo
+        } = req.query;
+
+        const datos =
+            await reportService.obtenerDisponibilidad(
+                inicio,
+                fin,
+                tipo
+            );
+
+        res.json(datos);
+
+    } catch (error) {
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+async function obtenerSaldoReserva(req, res) {
+
+    try {
+
+        const datos =
+            await reportService.obtenerSaldoReserva(
+                req.params.id
+            );
+
+        res.json(datos);
+
+    } catch (error) {
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+}
+
+
+
 module.exports = {
 
     obtenerHabitacionesDisponibles,
@@ -82,5 +130,9 @@ module.exports = {
 
     obtenerOcupacionMensual,
 
-    obtenerSatisfaccion
+    obtenerSatisfaccion,
+
+    obtenerDisponibilidad,
+
+    obtenerSaldoReserva
 };

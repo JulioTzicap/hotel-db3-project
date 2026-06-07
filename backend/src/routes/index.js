@@ -35,6 +35,10 @@ const mongoReportController = require(
     "../controllers/mongoReportController"
 );
 
+const serviceController = require(
+    "../controllers/serviceController"
+);
+
 router.post(
     "/reservas",
     reservationController.crearReserva
@@ -193,6 +197,37 @@ router.get(
 router.get(
     "/huespedes-frecuentes",
     mongoReportController.obtenerHuespedesFrecuentes
+);
+
+
+router.get(
+    "/disponibilidad",
+    reportController.obtenerDisponibilidad
+);
+
+router.get(
+    "/saldo/:id",
+    reportController.obtenerSaldoReserva
+);
+
+router.get(
+    "/servicios",
+    serviceController.obtenerServicios
+);
+
+router.post(
+    "/servicios",
+    serviceController.crearServicio
+);
+
+router.put(
+    "/servicios/:id",
+    serviceController.actualizarServicio
+);
+
+router.delete(
+    "/servicios/:id",
+    serviceController.eliminarServicio
 );
 
 module.exports = router;
