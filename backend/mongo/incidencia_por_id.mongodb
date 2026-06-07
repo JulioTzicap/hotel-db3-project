@@ -1,0 +1,5 @@
+use("hotel");
+
+db.incidencias.find({
+    reservaId: 1
+});

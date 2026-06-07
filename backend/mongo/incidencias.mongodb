@@ -1,0 +1,5 @@
+use("hotel");
+
+db.incidencias.find().sort({
+    fechaCreacion: -1
+});

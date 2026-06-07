@@ -1,0 +1,135 @@
+db = db.getSiblingDB("hotel");
+
+const tiposIncidencia = [
+  "limpieza",
+  "mantenimiento",
+  "ruido",
+  "wifi",
+  "aire_acondicionado",
+  "recepcion"
+];
+
+const prioridades = ["baja", "media", "alta"];
+const estados = ["abierta", "en_proceso", "cerrada"];
+
+const comentariosReview = [
+  "Excelente servicio, divino",
+  "Habitación limpia y exclente servicio",
+  "Buena ubicación",
+  "La entrada fue algo lenta, después de eso todo bien",
+  "El desayuno estuvo excelente",
+  "Volvería a quedarme aqui",
+  "Julio Tzicap fue un excelente recepcionista",
+  "Manuel Dominguez fue muy atento con nosotros",
+];
+
+function fechaAleatoriaUltimos6Meses() {
+  const hoy = new Date();
+  const hace6Meses = new Date();
+  hace6Meses.setMonth(hace6Meses.getMonth() - 6);
+
+  return new Date(
+    hace6Meses.getTime() +
+      Math.random() * (hoy.getTime() - hace6Meses.getTime())
+  );
+}
+
+// ====================
+// 40 INCIDENCIAS
+// ====================
+
+const incidencias = [];
+
+for (let i = 1; i <= 40; i++) {
+  incidencias.push({
+    reservaId: Math.floor(Math.random() * 200) + 1,
+    huespedId: Math.floor(Math.random() * 80) + 1,
+    habitacionId: Math.floor(Math.random() * 30) + 1,
+
+    tipo:
+      tiposIncidencia[
+        Math.floor(Math.random() * tiposIncidencia.length)
+      ],
+
+    prioridad:
+      prioridades[
+        Math.floor(Math.random() * prioridades.length)
+      ],
+
+    estado:
+      estados[
+        Math.floor(Math.random() * estados.length)
+      ],
+
+    titulo: `Incidencia #${i}`,
+
+    descripcion:
+      "Reporte generado automáticamente para pruebas.",
+
+    evidencias: [],
+
+    seguimiento: [
+      {
+        fecha: fechaAleatoriaUltimos6Meses(),
+        usuario: "recepcion",
+        comentario: "Incidencia registrada."
+      }
+    ],
+
+    fechaCreacion: fechaAleatoriaUltimos6Meses(),
+    fechaCierre: null
+  });
+}
+
+db.incidencias.insertMany(incidencias);
+
+// ====================
+// 150 REVIEWS
+// ====================
+
+const reviews = [];
+
+for (let i = 1; i <= 150; i++) {
+  reviews.push({
+    reservaId: i, // único por índice unique
+
+    huespedId: Math.floor(Math.random() * 80) + 1,
+
+    habitacionId: Math.floor(Math.random() * 30) + 1,
+
+    calificacion: Math.floor(Math.random() * 5) + 1,
+
+    titulo: `Review #${i}`,
+
+    comentario:
+      comentariosReview[
+        Math.floor(Math.random() * comentariosReview.length)
+      ],
+
+    aspectos: {
+      limpieza: Math.floor(Math.random() * 5) + 1,
+      atencion: Math.floor(Math.random() * 5) + 1,
+      comodidad: Math.floor(Math.random() * 5) + 1,
+      ubicacion: Math.floor(Math.random() * 5) + 1,
+      precioCalidad: Math.floor(Math.random() * 5) + 1
+    },
+
+    respuestaHotel:
+      Math.random() > 0.7
+        ? {
+            usuario: "admin",
+            mensaje: "Gracias por su comentario.",
+            fecha: fechaAleatoriaUltimos6Meses()
+          }
+        : null,
+
+    visible: true,
+
+    fechaCreacion: fechaAleatoriaUltimos6Meses()
+  });
+}
+
+db.reviews.insertMany(reviews);
+
+print("✓ 40 incidencias insertadas");
+print("✓ 150 reviews insertadas");

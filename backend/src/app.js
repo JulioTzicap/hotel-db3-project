@@ -1,10 +1,10 @@
 require("dotenv").config();
 
+
 const express = require("express");
 
-const conectarMongo = require(
-    "./config/mongo"
-);
+const { conectarMongo } = require("./config/mongo");
+
 
 const routes = require(
     "./routes"
