@@ -1,0 +1,190 @@
+{
+  "info": {
+    "name": "Hotel Mongo API",
+    "_postman_id": "hotel-mongo-api",
+    "description": "CRUD de Reviews e Incidencias",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Obtener Reviews",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/reviews",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Review por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/reviews/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reviews", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservaId\": 999,\n  \"huespedId\": 10,\n  \"habitacionId\": 5,\n  \"calificacion\": 5,\n  \"titulo\": \"Excelente servicio\",\n  \"comentario\": \"Todo estuvo perfecto.\",\n  \"aspectos\": {\n    \"limpieza\": 5,\n    \"atencion\": 5,\n    \"comodidad\": 5,\n    \"ubicacion\": 4,\n    \"precioCalidad\": 5\n  },\n  \"visible\": true,\n  \"fechaCreacion\": \"2025-06-01T10:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/reviews",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Review",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calificacion\": 4,\n  \"comentario\": \"Servicio bueno, pero puede mejorar.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/reviews/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reviews", "999"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Review",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3000/api/reviews/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "reviews", "999"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Incidencias",
+      "item": [
+        {
+          "name": "Obtener Incidencias",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/incidencias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "incidencias"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Incidencia por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/api/incidencias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "incidencias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Incidencia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reservaId\": 999,\n  \"huespedId\": 20,\n  \"habitacionId\": 8,\n  \"tipo\": \"mantenimiento\",\n  \"prioridad\": \"alta\",\n  \"estado\": \"abierta\",\n  \"titulo\": \"Aire acondicionado dañado\",\n  \"descripcion\": \"No enfría correctamente.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/incidencias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "incidencias"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Incidencia",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"cerrada\",\n  \"prioridad\": \"media\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/incidencias/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "incidencias", "999"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Incidencia",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3000/api/incidencias/999",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "incidencias", "999"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

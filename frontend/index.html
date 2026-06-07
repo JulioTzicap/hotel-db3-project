@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hotel BD3 — Sistema de Gestión</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Hotel BD3</h1>
+    <span>Sistema de Gestión</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" data-page="dashboard" data-title="Dashboard" onclick="navigate('dashboard')">
+      <i class="fas fa-chart-pie"></i> Dashboard
+    </a>
+
+    <div class="nav-section-label">Gestión</div>
+    <a class="nav-item" data-page="habitaciones" data-title="Habitaciones" onclick="navigate('habitaciones')">
+      <i class="fas fa-door-open"></i> Habitaciones
+    </a>
+    <a class="nav-item" data-page="huespedes" data-title="Huéspedes" onclick="navigate('huespedes')">
+      <i class="fas fa-users"></i> Huéspedes
+    </a>
+    <a class="nav-item" data-page="reservas" data-title="Reservas & Checkout" onclick="navigate('reservas')">
+      <i class="fas fa-calendar-check"></i> Reservas & Checkout
+    </a>
+
+    <div class="nav-section-label">MongoDB</div>
+    <a class="nav-item" data-page="reviews" data-title="Reviews" onclick="navigate('reviews')">
+      <i class="fas fa-star"></i> Reviews
+    </a>
+    <a class="nav-item" data-page="incidencias" data-title="Incidencias" onclick="navigate('incidencias')">
+      <i class="fas fa-exclamation-triangle"></i> Incidencias
+    </a>
+
+    <div class="nav-section-label">Reportes</div>
+    <a class="nav-item" data-page="reportes" data-title="Reportes PostgreSQL" onclick="navigate('reportes')">
+      <i class="fas fa-database"></i> PostgreSQL
+    </a>
+    <a class="nav-item" data-page="mongodb" data-title="Reportes MongoDB" onclick="navigate('mongodb')">
+      <i class="fas fa-leaf"></i> MongoDB
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <i class="fas fa-circle" style="color:var(--success);font-size:.5rem"></i>
+    Conectado a <strong>localhost:3000</strong>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════ -->
+<div class="main">
+  <header class="topbar">
+    <span class="topbar-title" id="topbarTitle">Dashboard</span>
+    <div class="topbar-right">
+      <span class="text-muted" style="font-size:.78rem">BD3 — PostgreSQL + MongoDB</span>
+      <span class="badge badge-gold">v1.0</span>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- ─── DASHBOARD ──────────────────────────────────── -->
+    <div class="page active" id="page-dashboard">
+      <div class="grid-4 mb-4">
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-door-open"></i></div>
+          <div>
+            <div class="stat-value" id="statDisponibles">—</div>
+            <div class="stat-label">Habitaciones disponibles</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-user-clock"></i></div>
+          <div>
+            <div class="stat-value" id="statHuespedes">—</div>
+            <div class="stat-label">Huéspedes en estadía</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold"><i class="fas fa-bed"></i></div>
+          <div>
+            <div class="stat-value" id="statHabitaciones">—</div>
+            <div class="stat-label">Total habitaciones</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fas fa-star"></i></div>
+          <div>
+            <div class="stat-value" id="statReviews">—</div>
+            <div class="stat-label">Reviews registradas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-user-check" style="color:var(--gold);margin-right:8px"></i>Huéspedes en estadía actual</h5>
+          <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync"></i> Actualizar</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Huésped</th>
+                <th>Habitación</th>
+                <th>Check-in</th>
+                <th>Check-out est.</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyActuales">
+              <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── HABITACIONES ───────────────────────────────── -->
+    <div class="page" id="page-habitaciones">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-door-open" style="color:var(--gold);margin-right:8px"></i>Habitaciones</h5>
+          <div class="flex gap-2">
+            <button class="btn btn-outline btn-sm" onclick="loadHabitaciones()"><i class="fas fa-sync"></i></button>
+            <button class="btn btn-gold btn-sm" onclick="newHabitacion()"><i class="fas fa-plus"></i> Nueva</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Número</th>
+                <th>Piso</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHabitaciones">
+              <tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── HUÉSPEDES ──────────────────────────────────── -->
+    <div class="page" id="page-huespedes">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-users" style="color:var(--gold);margin-right:8px"></i>Huéspedes</h5>
+          <div class="flex gap-2">
+            <button class="btn btn-outline btn-sm" onclick="loadHuespedes()"><i class="fas fa-sync"></i></button>
+            <button class="btn btn-gold btn-sm" onclick="newHuesped()"><i class="fas fa-plus"></i> Nuevo</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Nacionalidad</th>
+                <th>Documento</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHuespedes">
+              <tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── RESERVAS & CHECKOUT ────────────────────────── -->
+    <div class="page" id="page-reservas">
+      <div class="grid-2 mb-4">
+
+        <!-- Crear Reserva -->
+        <div class="card">
+          <div class="card-header">
+            <h5><i class="fas fa-calendar-plus" style="color:var(--gold);margin-right:8px"></i>Crear Reserva</h5>
+            <span class="badge badge-blue">Stored Procedure</span>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Huésped</label>
+              <select class="form-select" id="resHuesped">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Habitación (disponibles)</label>
+              <select class="form-select" id="resHabitacion">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Check-in</label>
+                <input type="date" class="form-control" id="resCheckIn"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Check-out</label>
+                <input type="date" class="form-control" id="resCheckOut"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cantidad de huéspedes</label>
+              <input type="number" class="form-control" id="resCantidad" value="1" min="1"/>
+            </div>
+            <button class="btn btn-gold" onclick="crearReserva()" style="width:100%">
+              <i class="fas fa-calendar-check"></i> Crear Reserva
+            </button>
+            <div class="mt-4">
+              <div class="form-label mb-2">Respuesta del servidor</div>
+              <div class="response-box" id="resRespuesta">— Esperando...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkout -->
+        <div class="card">
+          <div class="card-header">
+            <h5><i class="fas fa-sign-out-alt" style="color:var(--gold);margin-right:8px"></i>Checkout</h5>
+            <span class="badge badge-blue">Stored Procedure</span>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">ID de Reserva</label>
+              <input type="number" class="form-control" id="coReserva" placeholder="Ej: 4"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Monto de pago (Q)</label>
+              <input type="number" class="form-control" id="coMonto" placeholder="Ej: 2225" step="0.01"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Método de pago</label>
+              <select class="form-select" id="coMetodo">
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia</option>
+              </select>
+            </div>
+            <button class="btn btn-gold" onclick="hacerCheckout()" style="width:100%">
+              <i class="fas fa-sign-out-alt"></i> Realizar Checkout
+            </button>
+            <div class="mt-4">
+              <div class="form-label mb-2">Respuesta del servidor</div>
+              <div class="response-box" id="coRespuesta">— Esperando...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saldo de reserva -->
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-coins" style="color:var(--gold);margin-right:8px"></i>Consultar Saldo de Reserva</h5>
+          <span class="badge badge-green">Vista / Función</span>
+        </div>
+        <div class="card-body">
+          <div class="flex gap-2 items-center mb-3">
+            <input type="number" class="form-control" id="saldoId" placeholder="ID de reserva" style="max-width:220px"/>
+            <button class="btn btn-gold" onclick="consultarSaldo()"><i class="fas fa-search"></i> Consultar</button>
+          </div>
+          <div class="response-box" id="saldoRespuesta">— Ingresa un ID de reserva</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── REVIEWS ────────────────────────────────────── -->
+    <div class="page" id="page-reviews">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-star" style="color:var(--gold);margin-right:8px"></i>Reviews <span class="badge badge-green" style="margin-left:8px">MongoDB</span></h5>
+          <div class="flex gap-2">
+            <button class="btn btn-outline btn-sm" onclick="loadReviews()"><i class="fas fa-sync"></i></button>
+            <button class="btn btn-gold btn-sm" onclick="openModal('modalReview')"><i class="fas fa-plus"></i> Nueva Review</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Huésped ID</th>
+                <th>Habitación ID</th>
+                <th>Calificación</th>
+                <th>Comentario</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyReviews">
+              <tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── INCIDENCIAS ────────────────────────────────── -->
+    <div class="page" id="page-incidencias">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fas fa-exclamation-triangle" style="color:var(--gold);margin-right:8px"></i>Incidencias <span class="badge badge-green" style="margin-left:8px">MongoDB</span></h5>
+          <div class="flex gap-2">
+            <button class="btn btn-outline btn-sm" onclick="loadIncidencias()"><i class="fas fa-sync"></i></button>
+            <button class="btn btn-gold btn-sm" onclick="openModal('modalIncidencia')"><i class="fas fa-plus"></i> Nueva</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Hab. ID</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyIncidencias">
+              <tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── REPORTES PostgreSQL ────────────────────────── -->
+    <div class="page" id="page-reportes">
+      <div class="grid-2 mb-4">
+
+        <!-- Habitaciones disponibles -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Habitaciones disponibles</h5>
+            <span class="badge badge-blue">Vista normal</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Lista todas las habitaciones con estado <em>disponible</em> en este momento.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/habitaciones-disponibles','rHabDisp')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rHabDisp">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <!-- Huéspedes actuales -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Huéspedes actuales</h5>
+            <span class="badge badge-blue">Vista normal</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Huéspedes con reserva en curso: habitación, fechas y días transcurridos.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/huespedes-actuales','rHuespAct')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rHuespAct">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <!-- Ocupación mensual -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Ocupación mensual</h5>
+            <span class="badge badge-gold">Vista materializada</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">% ocupación, ingresos por hospedaje y consumos extras, agrupado por mes y tipo.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/ocupacion-mensual','rOcup')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rOcup">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <!-- Saldo de reserva -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Saldo de reserva</h5>
+            <span class="badge badge-green">Función</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Total facturado menos pagos efectuados para una reserva específica.</p>
+            <div class="flex gap-2 mb-3">
+              <input type="number" class="form-control" id="rSaldoId" placeholder="ID reserva" style="max-width:160px"/>
+              <button class="btn btn-gold btn-sm" onclick="runReporte('/api/saldo/'+document.getElementById('rSaldoId').value,'rSaldo')">
+                <i class="fas fa-play"></i> Ejecutar
+              </button>
+            </div>
+            <div class="response-box" id="rSaldo">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <!-- Disponibilidad por rango -->
+        <div class="card" style="grid-column: 1 / -1">
+          <div class="card-header">
+            <h5>Disponibilidad por rango de fechas</h5>
+            <span class="badge badge-green">Función con parámetros</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Habitaciones libres para un rango de fechas y tipo específico.</p>
+            <div class="flex gap-2 items-center mb-3" style="flex-wrap:wrap">
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Fecha inicio</label>
+                <input type="date" class="form-control" id="dispInicio"/>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Fecha fin</label>
+                <input type="date" class="form-control" id="dispFin"/>
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Tipo habitación (ID, opcional)</label>
+                <input type="number" class="form-control" id="dispTipo" placeholder="Ej: 1"/>
+              </div>
+              <div style="margin-top:24px">
+                <button class="btn btn-gold" onclick="reporteDisponibilidad()"><i class="fas fa-play"></i> Ejecutar</button>
+              </div>
+            </div>
+            <div class="response-box" id="resDisponibilidad">— Sin ejecutar</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── REPORTES MongoDB ───────────────────────────── -->
+    <div class="page" id="page-mongodb">
+      <div class="grid-2">
+
+        <div class="card">
+          <div class="card-header">
+            <h5>Satisfacción trimestral</h5>
+            <span class="badge badge-green">Pipeline $group + $avg</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Promedio de métricas de calificación agrupado por trimestre.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/satisfaccion','rSatisf')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rSatisf">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h5>Aspectos mejorables</h5>
+            <span class="badge badge-green">Pipeline $unwind + $sortByCount</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Aspectos más mencionados como mejorables por los huéspedes.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/aspectos-mejorables','rAspectos')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rAspectos">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h5>Análisis de incidencias</h5>
+            <span class="badge badge-green">Pipeline $facet</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Cantidad por categoría, tasa de resolución y tiempo promedio de cierre.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/incidencias-analisis','rIncAn')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rIncAn">— Sin ejecutar</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h5>Huéspedes frecuentes</h5>
+            <span class="badge badge-green">Pipeline $lookup + $sort</span>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">Huéspedes con más estadías y mayor gasto acumulado.</p>
+            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/huespedes-frecuentes','rHuespFrec')">
+              <i class="fas fa-play"></i> Ejecutar
+            </button>
+            <div class="response-box mt-4" id="rHuespFrec">— Sin ejecutar</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end page-content -->
+</div><!-- end main -->
+
+<!-- ═══════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════ -->
+
+<!-- Modal Habitación -->
+<div class="modal-overlay" id="modalHabitacion" onclick="if(event.target===this)closeModal('modalHabitacion')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5 id="modalHabitacionTitle">Nueva Habitación</h5>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeModal('modalHabitacion')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="habId"/>
+      <div class="form-group">
+        <label class="form-label">Número de habitación</label>
+        <input type="text" class="form-control" id="habNumero" placeholder="Ej: 505"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Piso</label>
+        <input type="number" class="form-control" id="habPiso" placeholder="Ej: 5" min="1"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo de habitación (ID)</label>
+        <select class="form-select" id="habTipo">
+          <option value="1">1 — Simple</option>
+          <option value="2">2 — Doble</option>
+          <option value="3">3 — Suite</option>
+          <option value="4">4 — Suite Presidencial</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Estado</label>
+        <select class="form-select" id="habEstado">
+          <option value="disponible">Disponible</option>
+          <option value="ocupada">Ocupada</option>
+          <option value="mantenimiento">Mantenimiento</option>
+          <option value="limpieza">En limpieza</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalHabitacion')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveHabitacion()"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Huésped -->
+<div class="modal-overlay" id="modalHuesped" onclick="if(event.target===this)closeModal('modalHuesped')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5 id="modalHuespedTitle">Nuevo Huésped</h5>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeModal('modalHuesped')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="huesId"/>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Nombres</label>
+          <input type="text" class="form-control" id="huesNombres" placeholder="Pedro"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellidos</label>
+          <input type="text" class="form-control" id="huesApellidos" placeholder="Gómez"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="huesCorreo" placeholder="pedro@gmail.com"/>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Teléfono</label>
+          <input type="text" class="form-control" id="huesTelefono" placeholder="55551111"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nacionalidad</label>
+          <input type="text" class="form-control" id="huesNacionalidad" placeholder="Guatemala"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Número de documento</label>
+        <input type="text" class="form-control" id="huesDocumento" placeholder="DPI900"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalHuesped')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveHuesped()"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Review -->
+<div class="modal-overlay" id="modalReview" onclick="if(event.target===this)closeModal('modalReview')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5>Nueva Review <span class="badge badge-green" style="margin-left:8px">MongoDB</span></h5>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeModal('modalReview')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">ID Reserva</label>
+          <input type="number" class="form-control" id="rvReserva" placeholder="999"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ID Huésped</label>
+          <input type="number" class="form-control" id="rvHuesped" placeholder="10"/>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">ID Habitación</label>
+          <input type="number" class="form-control" id="rvHabitacion" placeholder="5"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Calificación general (1–5)</label>
+          <select class="form-select" id="rvCalificacion">
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Título</label>
+        <input type="text" class="form-control" id="rvTitulo" placeholder="Excelente servicio"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comentario</label>
+        <textarea class="form-control" id="rvComentario" rows="3" placeholder="Todo estuvo perfecto..."></textarea>
+      </div>
+      <div class="divider"></div>
+      <div class="form-label mb-3" style="color:var(--gold)">Aspectos (1–5)</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Limpieza</label>
+          <select class="form-select" id="rvLimpieza"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Atención</label>
+          <select class="form-select" id="rvAtencion"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Comodidad</label>
+          <select class="form-select" id="rvComodidad"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ubicación</label>
+          <select class="form-select" id="rvUbicacion"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Precio/Calidad</label>
+          <select class="form-select" id="rvPrecio"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalReview')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveReview()"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Incidencia -->
+<div class="modal-overlay" id="modalIncidencia" onclick="if(event.target===this)closeModal('modalIncidencia')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h5>Nueva Incidencia <span class="badge badge-green" style="margin-left:8px">MongoDB</span></h5>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeModal('modalIncidencia')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">ID Reserva</label>
+          <input type="number" class="form-control" id="incReserva" placeholder="999"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ID Huésped</label>
+          <input type="number" class="form-control" id="incHuesped" placeholder="20"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">ID Habitación</label>
+        <input type="number" class="form-control" id="incHabitacion" placeholder="8"/>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-select" id="incTipo">
+            <option value="mantenimiento">Mantenimiento</option>
+            <option value="limpieza">Limpieza</option>
+            <option value="queja">Queja</option>
+            <option value="solicitud">Solicitud</option>
+            <option value="seguridad">Seguridad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prioridad</label>
+          <select class="form-select" id="incPrioridad">
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Título</label>
+        <input type="text" class="form-control" id="incTitulo" placeholder="Aire acondicionado dañado"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" id="incDescripcion" rows="3" placeholder="No enfría correctamente..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalIncidencia')">Cancelar</button>
+      <button class="btn btn-gold" onclick="saveIncidencia()"><i class="fas fa-save"></i> Registrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST CONTAINER ─── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

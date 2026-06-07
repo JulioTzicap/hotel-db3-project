@@ -1,0 +1,539 @@
+{
+	"info": {
+		"_postman_id": "7702925f-00c2-45a5-a7c0-30b07efe5024",
+		"name": "Hotel BD3 - API",
+		"description": "Colección para probar el backend del proyecto Hotel BD3 (PostgreSQL + MongoDB).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "53221585",
+		"_collection_link": "https://manudomavi-130104.postman.co/workspace/Manuel-Dominguez's-Workspace~be1cb82f-ebf8-4ab4-8157-b2783292700a/collection/53221585-7702925f-00c2-45a5-a7c0-30b07efe5024?action=share&source=collection_link&creator=53221585"
+	},
+	"item": [
+		{
+			"name": "Salud",
+			"item": [
+				{
+					"name": "GET /api",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Habitaciones",
+			"item": [
+				{
+					"name": "Listar habitaciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener habitación por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear habitación",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numero_habitacion\": \"505\",\n  \"numero_piso\": 5,\n  \"id_tipo_habitacion\": 1,\n  \"estado\": \"disponible\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar habitación",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numero_habitacion\": \"505\",\n  \"numero_piso\": 5,\n  \"id_tipo_habitacion\": 1,\n  \"estado\": \"disponible\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar habitación",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Huéspedes",
+			"item": [
+				{
+					"name": "Listar huéspedes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/huespedes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener huésped por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/huespedes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear huésped",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombres\": \"Pedro\",\n  \"apellidos\": \"Gómez\",\n  \"correo\": \"pedro@gmail.com\",\n  \"telefono\": \"55551111\",\n  \"nacionalidad\": \"Guatemala\",\n  \"numero_documento\": \"DPI900\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/huespedes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar huésped",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombres\": \"Pedro\",\n  \"apellidos\": \"Gómez\",\n  \"correo\": \"pedro@gmail.com\",\n  \"telefono\": \"55551111\",\n  \"nacionalidad\": \"Guatemala\",\n  \"numero_documento\": \"DPI900\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/huespedes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar huésped",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/huespedes/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservas y checkout",
+			"item": [
+				{
+					"name": "Crear reserva (procedure)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_huesped\": 1,\n  \"id_habitacion\": 2,\n  \"fecha_check_in\": \"2026-07-10\",\n  \"fecha_check_out\": \"2026-07-15\",\n  \"cantidad_huespedes\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/reservas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"reservas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout (procedure)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_reserva\": 4,\n  \"monto_pago\": 2225,\n  \"metodo_pago\": \"Tarjeta\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/checkout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reportes PostgreSQL",
+			"item": [
+				{
+					"name": "Habitaciones disponibles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/habitaciones-disponibles",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"habitaciones-disponibles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Huéspedes actuales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/huespedes-actuales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes-actuales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ocupación mensual",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/ocupacion-mensual",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"ocupacion-mensual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Disponibilidad por rango",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/disponibilidad?inicio=2026-07-01&fin=2026-07-05&tipo=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"disponibilidad"
+							],
+							"query": [
+								{
+									"key": "inicio",
+									"value": "2026-07-01"
+								},
+								{
+									"key": "fin",
+									"value": "2026-07-05"
+								},
+								{
+									"key": "tipo",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Saldo de reserva",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/saldo/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"saldo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MongoDB",
+			"item": [
+				{
+					"name": "Satisfacción trimestral",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/satisfaccion",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"satisfaccion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aspectos mejorables",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/aspectos-mejorables",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"aspectos-mejorables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Análisis de incidencias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/incidencias-analisis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"incidencias-analisis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Huéspedes frecuentes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/huespedes-frecuentes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"huespedes-frecuentes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "servicios",
+			"item": [
+				{
+					"name": "GetSrvicios",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "PostServicios",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}
