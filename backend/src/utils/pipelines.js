@@ -1,162 +1,145 @@
-const Review = require("../models/mongo/Review");
-
-const Incident = require("../models/mongo/Incident");
-
-const GuestProfile = require("../models/mongo/GuestProfile");
+const { getMongoDB } = require("../config/mongo");
 
 async function obtenerSatisfaccionTrimestral() {
 
-    return await Review.aggregate([
+    const db = getMongoDB();
 
+    const fechaLimite = new Date();
+    fechaLimite.setMonth(fechaLimite.getMonth() - 3);
+
+    return await db.collection("reviews").aggregate([
+        {
+            $match: {
+                fechaCreacion: {
+                    $gte: fechaLimite
+                }
+            }
+        },
         {
             $group: {
-
-                _id: {
-
-                    trimestre: {
-
-                        $ceil: {
-
-                            $divide: [
-                                {
-                                    $month: "$createdAt"
-                                },
-                                3
-                            ]
-                        }
-                    }
+                _id: null,
+                promedioCalificacion: {
+                    $avg: "$calificacion"
                 },
-
-                promedio_limpieza: {
-                    $avg: "$limpieza"
+                totalReviews: {
+                    $sum: 1
                 },
-
-                promedio_atencion: {
-                    $avg: "$atencion"
+                maxCalificacion: {
+                    $max: "$calificacion"
                 },
-
-                promedio_ubicacion: {
-                    $avg: "$ubicacion"
-                },
-
-                promedio_confort: {
-                    $avg: "$confort"
-                },
-
-                promedio_calidad_precio: {
-                    $avg: "$calidad_precio"
+                minCalificacion: {
+                    $min: "$calificacion"
                 }
             }
         }
-    ]);
+    ]).toArray();
 }
 
 async function obtenerAspectosMejorables() {
 
-    return await Review.aggregate([
+    const db = getMongoDB();
 
-        {
-            $unwind: "$aspectos_mejorables"
-        },
-
+    return await db.collection("reviews").aggregate([
         {
             $group: {
-
-                _id: "$aspectos_mejorables",
-
-                total: {
-                    $sum: 1
+                _id: null,
+                limpieza: {
+                    $avg: "$aspectos.limpieza"
+                },
+                atencion: {
+                    $avg: "$aspectos.atencion"
+                },
+                comodidad: {
+                    $avg: "$aspectos.comodidad"
+                },
+                ubicacion: {
+                    $avg: "$aspectos.ubicacion"
+                },
+                precioCalidad: {
+                    $avg: "$aspectos.precioCalidad"
                 }
             }
-        },
-
-        {
-            $sort: {
-                total: -1
-            }
         }
-    ]);
+    ]).toArray();
 }
 
 async function obtenerAnalisisIncidencias() {
 
-    return await Incident.aggregate([
+    const db = getMongoDB();
 
-        {
-            $group: {
-
-                _id: "$categoria",
-
-                total: {
-                    $sum: 1
-                },
-
-                resueltas: {
-
-                    $sum: {
-
-                        $cond: [
-                            {
-                                $eq: [
-                                    "$estado",
-                                    "resuelta"
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                }
-            }
-        }
-    ]);
-}
-
-async function obtenerPerfilHuespedesFrecuentes() {
-
-    return await GuestProfile.aggregate([
-
+    return await db.collection("incidencias").aggregate([
         {
             $facet: {
-
-                idiomas: [
-
-                    {
-                        $unwind: "$idiomas"
-                    },
-
+                porEstado: [
                     {
                         $group: {
-
-                            _id: "$idiomas",
-
+                            _id: "$estado",
                             total: {
                                 $sum: 1
                             }
                         }
                     }
                 ],
-
-                alergias: [
-
-                    {
-                        $unwind: "$alergias"
-                    },
-
+                porPrioridad: [
                     {
                         $group: {
-
-                            _id: "$alergias",
-
+                            _id: "$prioridad",
                             total: {
                                 $sum: 1
                             }
                         }
                     }
+                ],
+                porTipo: [
+                    {
+                        $group: {
+                            _id: "$tipo",
+                            total: {
+                                $sum: 1
+                            }
+                        }
+                    }
+                ],
+                recientes: [
+                    {
+                        $sort: {
+                            fechaCreacion: -1
+                        }
+                    },
+                    {
+                        $limit: 5
+                    }
                 ]
             }
         }
-    ]);
+    ]).toArray();
+}
+
+async function obtenerPerfilHuespedesFrecuentes() {
+
+    const db = getMongoDB();
+
+    return await db.collection("reviews").aggregate([
+        {
+            $group: {
+                _id: "$huespedId",
+                totalReviews: {
+                    $sum: 1
+                },
+                promedioCalificacion: {
+                    $avg: "$calificacion"
+                }
+            }
+        },
+        {
+            $sort: {
+                totalReviews: -1
+            }
+        },
+        {
+            $limit: 10
+        }
+    ]).toArray();
 }
 
 module.exports = {

@@ -31,6 +31,10 @@ const incidenciaController = require(
     "../controllers/incidenciaController"
 );
 
+const mongoReportController = require(
+    "../controllers/mongoReportController"
+);
+
 router.post(
     "/reservas",
     reservationController.crearReserva
@@ -170,4 +174,25 @@ router.delete(
     "/incidencias/:id",
     incidenciaController.eliminarIncidencia
 );
+
+router.get(
+    "/satisfaccion",
+    mongoReportController.obtenerSatisfaccionTrimestral
+);
+
+router.get(
+    "/aspectos-mejorables",
+    mongoReportController.obtenerAspectosMejorables
+);
+
+router.get(
+    "/incidencias-analisis",
+    mongoReportController.obtenerAnalisisIncidencias
+);
+
+router.get(
+    "/huespedes-frecuentes",
+    mongoReportController.obtenerHuespedesFrecuentes
+);
+
 module.exports = router;
