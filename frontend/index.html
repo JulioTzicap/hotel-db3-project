@@ -300,10 +300,9 @@
             <thead>
               <tr>
                 <th>Título</th>
+                <th>Calificación</th>
                 <th>Huésped ID</th>
                 <th>Habitación ID</th>
-                <th>Calificación</th>
-                <th>Comentario</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -333,7 +332,6 @@
                 <th>Tipo</th>
                 <th>Prioridad</th>
                 <th>Estado</th>
-                <th>Hab. ID</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -357,10 +355,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Lista todas las habitaciones con estado <em>disponible</em> en este momento.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/habitaciones-disponibles','rHabDisp')">
+            <button class="btn btn-gold btn-sm" onclick="reporteHabDisponibles()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rHabDisp">— Sin ejecutar</div>
+            <div id="rHabDisp" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -372,10 +370,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Huéspedes con reserva en curso: habitación, fechas y días transcurridos.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/huespedes-actuales','rHuespAct')">
+            <button class="btn btn-gold btn-sm" onclick="reporteHuespActuales()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rHuespAct">— Sin ejecutar</div>
+            <div id="rHuespAct" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -387,10 +385,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">% ocupación, ingresos por hospedaje y consumos extras, agrupado por mes y tipo.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/ocupacion-mensual','rOcup')">
+            <button class="btn btn-gold btn-sm" onclick="reporteOcupacion()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rOcup">— Sin ejecutar</div>
+            <div id="rOcup" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -404,11 +402,11 @@
             <p class="text-muted mb-3">Total facturado menos pagos efectuados para una reserva específica.</p>
             <div class="flex gap-2 mb-3">
               <input type="number" class="form-control" id="rSaldoId" placeholder="ID reserva" style="max-width:160px"/>
-              <button class="btn btn-gold btn-sm" onclick="runReporte('/api/saldo/'+document.getElementById('rSaldoId').value,'rSaldo')">
+              <button class="btn btn-gold btn-sm" onclick="reporteSaldo()">
                 <i class="fas fa-play"></i> Ejecutar
               </button>
             </div>
-            <div class="response-box" id="rSaldo">— Sin ejecutar</div>
+            <div id="rSaldo">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -455,10 +453,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Promedio de métricas de calificación agrupado por trimestre.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/satisfaccion','rSatisf')">
+            <button class="btn btn-gold btn-sm" onclick="reporteSatisfaccion()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rSatisf">— Sin ejecutar</div>
+            <div id="rSatisf" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -469,10 +467,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Aspectos más mencionados como mejorables por los huéspedes.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/aspectos-mejorables','rAspectos')">
+            <button class="btn btn-gold btn-sm" onclick="reporteAspectos()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rAspectos">— Sin ejecutar</div>
+            <div id="rAspectos" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -483,10 +481,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Cantidad por categoría, tasa de resolución y tiempo promedio de cierre.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/incidencias-analisis','rIncAn')">
+            <button class="btn btn-gold btn-sm" onclick="reporteIncidencias()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rIncAn">— Sin ejecutar</div>
+            <div id="rIncAn" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -497,10 +495,10 @@
           </div>
           <div class="card-body">
             <p class="text-muted mb-3">Huéspedes con más estadías y mayor gasto acumulado.</p>
-            <button class="btn btn-gold btn-sm" onclick="runReporte('/api/huespedes-frecuentes','rHuespFrec')">
+            <button class="btn btn-gold btn-sm" onclick="reporteHuespFrecuentes()">
               <i class="fas fa-play"></i> Ejecutar
             </button>
-            <div class="response-box mt-4" id="rHuespFrec">— Sin ejecutar</div>
+            <div id="rHuespFrec" class="mt-4">— Sin ejecutar</div>
           </div>
         </div>
 
@@ -730,6 +728,21 @@
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('modalIncidencia')">Cancelar</button>
       <button class="btn btn-gold" onclick="saveIncidencia()"><i class="fas fa-save"></i> Registrar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Detalle (reviews e incidencias) -->
+<div class="modal-overlay" id="modalDetalle" onclick="if(event.target===this)closeModal('modalDetalle')">
+  <div class="modal-box" style="max-width:580px">
+    <div class="modal-header">
+      <h5 id="detalleModalTitle">Detalle</h5>
+      <button class="btn btn-outline btn-icon btn-sm" onclick="closeModal('modalDetalle')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="detalleModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modalDetalle')">Cerrar</button>
     </div>
   </div>
 </div>
