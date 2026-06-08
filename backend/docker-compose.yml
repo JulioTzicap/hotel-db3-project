@@ -6,3 +6,18 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo/init.js:/docker-entrypoint-initdb.d/init.js
+
+  postgres:
+    image: postgres:17
+    container_name: postgres_hotel
+    environment:
+      POSTGRES_DB: hotel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
