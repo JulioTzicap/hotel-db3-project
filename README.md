@@ -9,12 +9,11 @@ Ejecutar los siguientes coandos:
     npm install express pg mongoose dotenv cors morgan nodemon faker bcrypt uuid mongodb
 
 
-Para levantar contenedores
-    desde la carpeta de backend
+Para levantar contenedores desde la carpeta de backend
 
         docker compose up -d
 
-    Para ver que el contenedor este levantado
+Para ver que el contenedor este levantado
 
         docker ps
 
@@ -35,9 +34,10 @@ Ejecutar lo archivos sql de la siguiente manera:
 
     procedures.sql
     
-    ## Configuración de MongoDB
+
 
 O alimentarlo con el script
+
 Dar permisos al script
 
     chmod +x scripts/init_postgres.sh
@@ -49,41 +49,45 @@ Ejecutar el script
 
 
 Para verificar el contenedor de mongo
+
     docker exec -it mongo_hotel mongosh
 
-    dentro de mongo
+dentro de mongo
+    
     use hotel
     show collections
 
-    debe mostrar
+debe mostrar
+    
     incidencias
     reviews
 
-    Para alimentar el seed
+Para alimentar el seed
 
     docker exec -i mongo_hotel mongosh < mongo/seed.mongodb
 
 Para programar backups automaticos en linux
-    Abrir en terminal
+Abrir en terminal
     
         crontab -e
 
-    Agregar la siguiente linea
+Agregar la siguiente linea
+
         0 1 * * * cd [Ruta al proyecto] && ./scripts/backup_databases.sh
     
-    ** Cambiar [ruta al proyecto] por la ruta donde se guardo el proyecto
+** Cambiar [ruta al proyecto] por la ruta donde se guardo el proyecto
 
-    Guardar y verificar con
+Guardar y verificar con
     
         crontab -l
 
-    Para restaurar backups
+Para restaurar backups
 
         cat backups/postgres/NOMBRE_BACKUP.sql | docker exec -i postgres_hotel psql -U postgres -d hotel
 
         cat backups/mongo/NOMBRE_BACKUP.archive | docker exec -i mongo_hotel mongorestore --archive
 
-    ** cambiar NOMBRE_BACKUP por el nombre del ultimo backup realizado
+** cambiar NOMBRE_BACKUP por el nombre del ultimo backup realizado
 
 
 
